@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_histoy_histories",
+  "info": {
+    "displayName": "history",
+    "icon": "clock"
+  },
+  "options": {},
+  "attributes": {
+    "event": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::event.event"
+    }
+  }
+}

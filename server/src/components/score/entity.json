@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_score_entities",
+  "info": {
+    "displayName": "entity",
+    "icon": "emotionHappy",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "viewed": {
+      "type": "boolean",
+      "default": false
+    },
+    "noted": {
+      "type": "boolean",
+      "default": false
+    },
+    "label": {
+      "type": "string"
+    },
+    "JSONdata": {
+      "type": "json"
+    }
+  }
+}

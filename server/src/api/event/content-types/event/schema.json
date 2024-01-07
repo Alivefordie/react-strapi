@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "events",
+  "info": {
+    "singularName": "event",
+    "pluralName": "events",
+    "displayName": "Event",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "owner": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "events"
+    },
+    "allscore": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::allscore.allscore",
+      "inversedBy": "event"
+    },
+    "datedeploy": {
+      "type": "datetime",
+      "required": true
+    },
+    "allhistory": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::allhistory.allhistory",
+      "inversedBy": "events"
+    }
+  }
+}
