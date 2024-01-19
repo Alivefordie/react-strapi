@@ -71,11 +71,15 @@
       "target": "api::event.event",
       "mappedBy": "owner"
     },
-    "allhistory": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::allhistory.allhistory",
-      "mappedBy": "user"
+    "usrId": {
+      "type": "biginteger",
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "required": true,
+      "targetField": "usrId"
     }
   }
 }

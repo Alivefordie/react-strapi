@@ -1,25 +1,28 @@
 {
   "collectionName": "components_score_entities",
   "info": {
-    "displayName": "entity",
+    "displayName": "entry",
     "icon": "emotionHappy",
     "description": ""
   },
   "options": {},
   "attributes": {
-    "viewed": {
-      "type": "boolean",
-      "default": false
-    },
-    "noted": {
-      "type": "boolean",
-      "default": false
-    },
     "label": {
       "type": "string"
     },
     "JSONdata": {
       "type": "json"
+    },
+    "student": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "seen": {
+      "type": "datetime"
+    },
+    "noted": {
+      "type": "datetime"
     }
   }
 }

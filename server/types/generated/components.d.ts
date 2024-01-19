@@ -5,24 +5,31 @@ export interface HistoyHistory extends Schema.Component {
   info: {
     displayName: 'history';
     icon: 'clock';
+    description: '';
   };
   attributes: {
-    event: Attribute.Relation<'histoy.history', 'oneToOne', 'api::event.event'>;
+    label: Attribute.String;
+    slug: Attribute.String;
   };
 }
 
 export interface ScoreEntity extends Schema.Component {
   collectionName: 'components_score_entities';
   info: {
-    displayName: 'entity';
+    displayName: 'entry';
     icon: 'emotionHappy';
     description: '';
   };
   attributes: {
-    viewed: Attribute.Boolean & Attribute.DefaultTo<false>;
-    noted: Attribute.Boolean & Attribute.DefaultTo<false>;
     label: Attribute.String;
     JSONdata: Attribute.JSON;
+    student: Attribute.Relation<
+      'score.entity',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    seen: Attribute.DateTime;
+    noted: Attribute.DateTime;
   };
 }
 

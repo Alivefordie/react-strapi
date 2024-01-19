@@ -13,7 +13,8 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "description": {
       "type": "blocks"
@@ -24,21 +25,19 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "events"
     },
-    "allscore": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::allscore.allscore",
-      "inversedBy": "event"
-    },
     "datedeploy": {
       "type": "datetime",
-      "required": true
+      "required": false
     },
-    "allhistory": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::allhistory.allhistory",
-      "inversedBy": "events"
+    "scores": {
+      "type": "component",
+      "repeatable": true,
+      "component": "score.entity"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": false
     }
   }
 }

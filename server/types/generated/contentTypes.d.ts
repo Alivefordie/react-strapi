@@ -362,85 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiAllhistoryAllhistory extends Schema.CollectionType {
-  collectionName: 'allhistories';
-  info: {
-    singularName: 'allhistory';
-    pluralName: 'allhistories';
-    displayName: 'Allhistory';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    user: Attribute.Relation<
-      'api::allhistory.allhistory',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    label: Attribute.String & Attribute.Required;
-    events: Attribute.Relation<
-      'api::allhistory.allhistory',
-      'oneToMany',
-      'api::event.event'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::allhistory.allhistory',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::allhistory.allhistory',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiAllscoreAllscore extends Schema.CollectionType {
-  collectionName: 'allscores';
-  info: {
-    singularName: 'allscore';
-    pluralName: 'allscores';
-    displayName: 'Allscore';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    event: Attribute.Relation<
-      'api::allscore.allscore',
-      'oneToOne',
-      'api::event.event'
-    >;
-    score: Attribute.Component<'score.entity', true>;
-    label: Attribute.String & Attribute.Required;
-    allJSONdata: Attribute.JSON;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::allscore.allscore',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::allscore.allscore',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiEventEvent extends Schema.CollectionType {
   collectionName: 'events';
   info: {
@@ -453,24 +374,16 @@ export interface ApiEventEvent extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    name: Attribute.String;
+    name: Attribute.String & Attribute.Required;
     description: Attribute.Blocks;
     owner: Attribute.Relation<
       'api::event.event',
       'manyToOne',
       'plugin::users-permissions.user'
     >;
-    allscore: Attribute.Relation<
-      'api::event.event',
-      'oneToOne',
-      'api::allscore.allscore'
-    >;
-    datedeploy: Attribute.DateTime & Attribute.Required;
-    allhistory: Attribute.Relation<
-      'api::event.event',
-      'manyToOne',
-      'api::allhistory.allhistory'
-    >;
+    datedeploy: Attribute.DateTime;
+    scores: Attribute.Component<'score.entity', true>;
+    slug: Attribute.UID<'api::event.event', 'name'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -882,11 +795,9 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::event.event'
     >;
-    allhistory: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToOne',
-      'api::allhistory.allhistory'
-    >;
+    usrId: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
+    slug: Attribute.UID<'plugin::users-permissions.user', 'usrId'> &
+      Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -914,8 +825,6 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::allhistory.allhistory': ApiAllhistoryAllhistory;
-      'api::allscore.allscore': ApiAllscoreAllscore;
       'api::event.event': ApiEventEvent;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
