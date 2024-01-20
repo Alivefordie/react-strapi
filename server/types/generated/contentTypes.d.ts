@@ -375,7 +375,6 @@ export interface ApiEventEvent extends Schema.CollectionType {
   };
   attributes: {
     name: Attribute.String & Attribute.Required;
-    description: Attribute.Blocks;
     owner: Attribute.Relation<
       'api::event.event',
       'manyToOne',
@@ -384,6 +383,7 @@ export interface ApiEventEvent extends Schema.CollectionType {
     datedeploy: Attribute.DateTime;
     scores: Attribute.Component<'score.entity', true>;
     slug: Attribute.UID<'api::event.event', 'name'>;
+    description: Attribute.Text;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

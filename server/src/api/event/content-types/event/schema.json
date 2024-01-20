@@ -16,9 +16,6 @@
       "type": "string",
       "required": true
     },
-    "description": {
-      "type": "blocks"
-    },
     "owner": {
       "type": "relation",
       "relation": "manyToOne",
@@ -38,6 +35,9 @@
       "type": "uid",
       "targetField": "name",
       "required": false
+    },
+    "description": {
+      "type": "text"
     }
   }
 }
