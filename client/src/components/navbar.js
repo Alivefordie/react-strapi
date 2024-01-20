@@ -5,7 +5,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Col } from "react-bootstrap";
+
 function Navbarr() {
 	const navigate = useNavigate();
 	const info = JSON.parse(localStorage.getItem("userinfo"));
@@ -21,7 +21,11 @@ function Navbarr() {
 					<Navbar.Brand className="text-white">
 						<Link
 							to="/"
-							style={{ color: "white", textDecoration: "none" }}
+							style={{
+								color: "white",
+								textDecoration: "none",
+								fontSize: "25px",
+							}}
 						>
 							Logo
 						</Link>
@@ -29,6 +33,7 @@ function Navbarr() {
 					<Navbar.Toggle />
 					<Navbar.Collapse className="justify-content-end">
 						<NavDropdown
+							style={{ fontSize: "20px" }}
 							title={info.username}
 							id="navbarScrollingDropdown"
 						>
