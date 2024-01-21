@@ -10,6 +10,8 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 import Navbarr from "./components/navbar";
 import { Navigate } from "react-router-dom";
 import Eventdetail from "./eventdetail";
+import Staffpage from "./staff";
+import Evendtstaff from "./eventDTstaff";
 console.log(localStorage.getItem("jwttoken"));
 console.log(JSON.parse(localStorage.getItem("userinfo")));
 
@@ -35,7 +37,10 @@ const router = createBrowserRouter([
 				element: <Navbarr />,
 				children: [
 					{ path: "/student", element: <StudentPage /> },
+					{ path: "/staff", element: <Staffpage /> },
 					{ path: "/student/:slug", element: <Eventdetail /> },
+					{ path: "/staff/:slug", element: <Evendtstaff /> },
+					{ path: "*", element: <h1>err</h1> },
 				],
 			},
 		],

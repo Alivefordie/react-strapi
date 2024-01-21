@@ -19,10 +19,11 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
   async findOne(ctx) {
     await this.validateQuery(ctx);
     let sanitizedQueryParams = await this.sanitizeQuery(ctx);
+    console.log(sanitizedQueryParams);
     sanitizedQueryParams.populate["owner"]["select"] =
       sanitizedQueryParams.populate["owner"]["fields"];
-    sanitizedQueryParams.populate["scores"].populate["student"]["select"] =
-      sanitizedQueryParams.populate["scores"].populate["student"]["fields"];
+    //sanitizedQueryParams.populate["scores"].populate["student"]["select"] =
+    //  sanitizedQueryParams.populate["scores"].populate["student"]["fields"];
     const slug = ctx.params.slug;
     const entry = await strapi.db
       .query("api::event.event")
@@ -92,6 +93,7 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
     const entries = await strapi.db.query("api::event.event").findMany({
       select: ["id", "name", "slug", "description"],
       where: {
+        publishedAt: { $ne: null },
         scores: {
           student: { id: { $eq: ctx.state.user.id } },
         },
@@ -117,6 +119,7 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
         },
       },
       where: {
+        publishedAt: { $ne: null },
         scores: {
           student: { id: { $eq: ctx.state.user.id } },
         },

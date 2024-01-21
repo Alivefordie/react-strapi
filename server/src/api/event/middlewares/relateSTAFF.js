@@ -10,15 +10,8 @@ module.exports = (config, { strapi }) => {
     ctx.query = {
       populate: {
         owner: { fields: ["id", "username", "usrId"] },
-        scores: {
-          populate: {
-            student: {
-              fields: ["id", "username", "usrId"],
-            },
-          },
-        },
+        scores: true,
       },
-      ...ctx.query,
     };
     await next();
   };
