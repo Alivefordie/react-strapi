@@ -113,7 +113,9 @@ function Staffpage() {
 							name: data.Name,
 							description: data.Descpition,
 							datedeploy: t2.toISOString(),
-							publishedAt: null,
+							// not public
+							// publishedAt: null,
+							// publishedAt: t2.toISOString(), if real deploy
 							scores: all,
 						},
 					}

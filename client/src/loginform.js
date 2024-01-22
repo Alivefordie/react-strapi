@@ -4,8 +4,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const LoginForm = () => {
 	const navigate = useNavigate();
-	const [username, setUsername] = useState("stdb");
-	const [password, setPassword] = useState("123456");
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
 	const [submitEnabled, setSubmitEnabled] = useState(true);
 	const handleUsernameChange = (e) => {
 		setUsername(e.target.value);
