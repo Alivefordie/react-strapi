@@ -155,7 +155,7 @@ function Evendtstaff() {
 								{new Date(listevent.datedeploy).toString()}
 							</Card.Text>
 						</div>
-						<Accordion flush data-bs-theme="dark">
+						<Accordion alwaysOpen data-bs-theme="dark">
 							{listevent.scores.map((s, i) => {
 								return (
 									<Accordion.Item eventKey={i} key={i}>
