@@ -44,7 +44,6 @@ function Evendetail() {
 	const fetchItems = async () => {
 		try {
 			const ac = axiosConfig;
-			console.log("fetch");
 			const response = await axios.get(
 				`http://localhost:1337/api/events/findonebystd/${param.slug}`
 			);
@@ -188,7 +187,6 @@ function Evendetail() {
 								{key ? score.label : "no announcement"}
 							</Card.Header>
 							<Card.Body className="border border-danger">
-								{console.log(key)}
 								{key ? (
 									<Table
 										className={`table-${theme}`}
@@ -200,7 +198,6 @@ function Evendetail() {
 										<thead>
 											<tr>
 												{key.map((o, i) => {
-													console.log(key);
 													return (
 														<th
 															className={`bg-${theme}`}

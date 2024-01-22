@@ -21,7 +21,6 @@ function StudentPage() {
 	};
 	const fetchItems = async () => {
 		try {
-			console.log("fetch");
 			const response = await axios.get(
 				"http://localhost:1337/api/events/findbystd"
 			);

@@ -81,10 +81,8 @@ function Staffpage() {
 		}
 		const value = e.target.value;
 		setdata({ ...data, [key]: value });
-		console.log(data);
 	};
 	const handleSubmit = async (event) => {
-		console.log(data);
 		if (Object.keys(data).length == 5) {
 			const t = Date.parse(data.date + "T" + data.time);
 			const t2 = new Date(t);
@@ -108,7 +106,6 @@ function Staffpage() {
 						["student"]: idu[0] ? idu[0].id : null,
 					};
 				});
-				console.log(data.Name, data.Descpition, t2.toISOString(), all);
 				const ok = await axios.post(
 					"http://localhost:1337/api/events",
 					{
@@ -131,7 +128,6 @@ function Staffpage() {
 	};
 	const fetchItems = async () => {
 		try {
-			console.log("fetch");
 			const response = await axios.get(
 				"http://localhost:1337/api/events"
 			);

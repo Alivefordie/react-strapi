@@ -9,8 +9,6 @@ import Staffpage from "./staff";
 import Evendtstaff from "./eventDTstaff";
 import { useState } from "react";
 function App() {
-	console.log(localStorage.getItem("jwttoken"));
-	console.log(JSON.parse(localStorage.getItem("userinfo")));
 	const [user, setuser] = useState(
 		JSON.parse(localStorage.getItem("userinfo"))
 	);

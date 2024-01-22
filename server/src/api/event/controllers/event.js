@@ -19,11 +19,8 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
   async findOne(ctx) {
     await this.validateQuery(ctx);
     let sanitizedQueryParams = await this.sanitizeQuery(ctx);
-    console.log(sanitizedQueryParams);
     sanitizedQueryParams.populate["owner"]["select"] =
       sanitizedQueryParams.populate["owner"]["fields"];
-    //sanitizedQueryParams.populate["scores"].populate["student"]["select"] =
-    //  sanitizedQueryParams.populate["scores"].populate["student"]["fields"];
     const slug = ctx.params.slug;
     const entry = await strapi.db
       .query("api::event.event")

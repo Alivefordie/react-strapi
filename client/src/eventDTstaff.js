@@ -35,12 +35,10 @@ function Evendtstaff() {
 	};
 	const fetchItems = async () => {
 		try {
-			console.log("fetch");
 			const response = await axios.get(
 				`http://localhost:1337/api/events/${param.slug}`
 			);
 			const event = response.data.data;
-			console.log("%c%s", "color: #807160", response);
 			seterror(null);
 			setlistevent({ ...event });
 			const scores = event.scores.map((s) => {
