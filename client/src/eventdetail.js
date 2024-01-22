@@ -13,8 +13,9 @@ function Evendetail() {
 	const [score, setscore] = useState({});
 	const [seen, setseen] = useState(null);
 	const [note, setnote] = useState(null);
-
+	const [geterror, seterror] = useState({});
 	const [loadind, setloading] = useState(false);
+	const [theme, settheme] = useState("info");
 	const [key, setkey] = useState(null);
 	const param = useParams();
 	const checkseen = async (s) => {
@@ -47,19 +48,36 @@ function Evendetail() {
 			const response = await axios.get(
 				`http://localhost:1337/api/events/findonebystd/${param.slug}`
 			);
+			seterror(null);
 			const event = response.data.data;
 			const score = event.scores[0];
 			setscore({ ...score });
 			setnote(score.noted);
 			setseen(score.seen);
 			if (score.JSONdata) {
-				const k = Object.values(score.JSONdata);
+				const k = Object.keys(score.JSONdata);
 				setkey(k);
+				const rsc = score.JSONdata[k[1]];
+				if (!isNaN(rsc)) {
+					if (rsc >= 75) {
+						settheme("success");
+					} else if (rsc >= 50) {
+						settheme("secondary");
+					} else {
+						settheme("danger");
+					}
+				}
 			}
 			setlistevent({ ...event });
 			return score;
 		} catch (err) {
 			console.log(err);
+			if (err.response?.data) {
+				seterror(err.response.data.error);
+			} else {
+				seterror(err);
+			}
+			setloading(false);
 		}
 	};
 
@@ -91,6 +109,12 @@ function Evendetail() {
 					animation="border"
 					variant="light"
 				/>
+			) : geterror ? (
+				<>
+					<h1>status : {geterror.status}</h1>
+					<h1>name :{geterror.name}</h1>
+					<h1>message : {geterror.message}</h1>
+				</>
 			) : (
 				<Card
 					border="info"
@@ -167,7 +191,7 @@ function Evendetail() {
 								{console.log(key)}
 								{key ? (
 									<Table
-										className="table-info"
+										className={`table-${theme}`}
 										striped
 										hover
 										bordered
@@ -175,15 +199,27 @@ function Evendetail() {
 									>
 										<thead>
 											<tr>
-												<th>ชื่อ</th>
-												<th>คะแนน</th>
-												<th>ผลการประเมิน</th>
+												{key.map((o, i) => {
+													console.log(key);
+													return (
+														<th
+															className={`bg-${theme}`}
+															key={i}
+														>
+															{o}
+														</th>
+													);
+												})}
 											</tr>
 										</thead>
 										<tbody>
 											<tr>
 												{key.map((o, i) => {
-													return <td key={i}>{o}</td>;
+													return (
+														<td key={i}>
+															{score.JSONdata[o]}
+														</td>
+													);
 												})}
 											</tr>
 										</tbody>

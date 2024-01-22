@@ -5,9 +5,12 @@ import Card from "react-bootstrap/Card";
 import { Form, Button } from "react-bootstrap";
 import axiosConfig from "./axios-intercepter";
 import { useNavigate } from "react-router-dom";
+import Spinner from "react-bootstrap/Spinner";
 function StudentPage() {
 	const [listevent, setlistevent] = useState([]);
 	const navigate = useNavigate();
+	const [geterror, seterror] = useState({});
+	const [loadind, setloading] = useState(false);
 	const [puredata, setpuredata] = useState([]);
 	const [search, setsearch] = useState("");
 	const handleSearch = (e) => {
@@ -22,6 +25,7 @@ function StudentPage() {
 			const response = await axios.get(
 				"http://localhost:1337/api/events/findbystd"
 			);
+			seterror(null);
 			if (!search) {
 				setpuredata(response.data.data);
 			} else {
@@ -32,11 +36,19 @@ function StudentPage() {
 				});
 				setpuredata(arrsearch);
 			}
+			setloading(false);
 		} catch (err) {
 			console.log(err);
+			if (err.response?.data) {
+				seterror(err.response.data.error);
+			} else {
+				seterror(err);
+			}
+			setloading(false);
 		}
 	};
 	useEffect(() => {
+		setloading(true);
 		const ac = axiosConfig;
 		fetchItems();
 	}, []);
@@ -63,26 +75,48 @@ function StudentPage() {
 		);
 	}, [puredata]);
 	return (
-		<Stack gap={3}>
-			<Form
-				onSubmit={handleSearch}
-				className="d-flex flex-row-reverse mt-3 me-3"
-			>
-				<Button type="submit" variant="success">
-					Search
-				</Button>
-				<Form.Control
-					onChange={(e) => {
-						setsearch(e.target.value);
+		<>
+			{loadind ? (
+				<Spinner
+					className="position-absolute top-50 start-50"
+					style={{
+						width: "10rem",
+						height: "10rem",
+						borderWidth: "1rem",
 					}}
-					type="search"
-					placeholder="Search"
-					className="w-25 me-2"
-					aria-label="Search"
+					size="lg"
+					animation="border"
+					variant="light"
 				/>
-			</Form>
-			{listevent}
-		</Stack>
+			) : geterror ? (
+				<>
+					<h1>status : {geterror.status}</h1>
+					<h1>name :{geterror.name}</h1>
+					<h1>message : {geterror.message}</h1>
+				</>
+			) : (
+				<Stack gap={3}>
+					<Form
+						onSubmit={handleSearch}
+						className="d-flex flex-row-reverse mt-3 me-3"
+					>
+						<Button type="submit" variant="success">
+							Search
+						</Button>
+						<Form.Control
+							onChange={(e) => {
+								setsearch(e.target.value);
+							}}
+							type="search"
+							placeholder="Search"
+							className="w-25 me-2"
+							aria-label="Search"
+						/>
+					</Form>
+					{listevent}
+				</Stack>
+			)}
+		</>
 	);
 }
 export default StudentPage;

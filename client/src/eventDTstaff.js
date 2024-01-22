@@ -2,19 +2,23 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect, Fragment } from "react";
 import Card from "react-bootstrap/Card";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Badge } from "react-bootstrap";
 import axiosConfig from "./axios-intercepter";
 import { useParams } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import Spinner from "react-bootstrap/Spinner";
+import { Accordion } from "react-bootstrap";
+import React from "react";
+import "./eventdettstaff.css";
 function Evendtstaff() {
 	const [listevent, setlistevent] = useState([]);
 	const [loadind, setloading] = useState(false);
 	const [edit, setedit] = useState(false);
 	const [geterror, seterror] = useState({});
+	const [key, setkey] = useState([]);
 	const navigate = useNavigate();
 	const param = useParams();
-
+	const cancel = () => setedit(!edit);
 	const editname = async () => {
 		if (edit) {
 			const newres = await axios.put(
@@ -39,10 +43,18 @@ function Evendtstaff() {
 			console.log("%c%s", "color: #807160", response);
 			seterror(null);
 			setlistevent({ ...event });
+			const scores = event.scores.map((s) => {
+				return Object.keys(s.JSONdata);
+			});
+			setkey(scores);
 			return event;
 		} catch (err) {
-			console.log(err.response.data.error);
-			seterror(err.response.data.error);
+			console.log(err);
+			if (err.response?.data) {
+				seterror(err.response.data.error);
+			} else {
+				seterror(err);
+			}
 			setloading(false);
 		}
 	};
@@ -111,54 +123,124 @@ function Evendtstaff() {
 							</Card.Text>
 						)}
 						<div className="d-flex align-self-center">
-							<Button onClick={editname}>Edit</Button>
+							{edit ? (
+								<>
+									<Button
+										variant="secondary"
+										onClick={cancel}
+									>
+										Cancel
+									</Button>
+									<Button
+										className="ms-2"
+										variant="success"
+										onClick={editname}
+									>
+										Confirm
+									</Button>
+								</>
+							) : (
+								<Button onClick={editname}>Edit</Button>
+							)}
 						</div>
 					</Card.Header>
 					<Card.Body className="border border-info ">
-						<Card.Text className="w-100">
-							รายละเอียด :
-							<br />
-							{listevent.description}
-						</Card.Text>
-						<Card
-							border="danger"
-							bg="dark"
-							className="w-100 text-white"
-							key={listevent.id}
-							slug={listevent.slug}
-						>
-							<Card.Header>score</Card.Header>
-							<Card.Body className="border border-danger">
-								<Table
-									className="table-info"
-									striped
-									hover
-									bordered
-									size="sm"
-								>
-									<thead>
-										<tr>
-											<th>ชื่อ</th>
-											<th>คะแนน</th>
-											<th>ผลการประเมิน</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>
-												Markเฟเเเเเเเเเเเเเเเเเเเเเเเเเเ
-											</td>
-											<td>Otto</td>
-											<td>@mdo</td>
-										</tr>
-										<tr>
-											<td colSpan={2}>Larry the Bird</td>
-											<td>@twitter</td>
-										</tr>
-									</tbody>
-								</Table>
-							</Card.Body>
-						</Card>
+						<div className="d-flex">
+							<Card.Text className="flex-fill w-50">
+								รายละเอียด :
+								<br />
+								{listevent.description}
+							</Card.Text>
+							<Card.Text className="flex-fill w-50">
+								วันประกาศ :
+								<br />
+								{new Date(listevent.datedeploy).toString()}
+							</Card.Text>
+						</div>
+						<Accordion flush data-bs-theme="dark">
+							{listevent.scores.map((s, i) => {
+								return (
+									<Accordion.Item eventKey={i} key={i}>
+										<Accordion.Header className="d-flex justify-content-between">
+											<div className="d-flex me-auto ">
+												{s.label}
+											</div>
+											{s.seen ? (
+												<Badge
+													className="d-flex me-2 align-self-center"
+													pill
+													bg="success"
+												>
+													seen
+												</Badge>
+											) : (
+												<Badge
+													className="d-flex ms-auto me-2 "
+													pill
+													bg="danger"
+												>
+													unseen
+												</Badge>
+											)}
+											{s.noted ? (
+												<Badge
+													className="d-flex ms-2 me-2 align-self-center"
+													pill
+													bg="success"
+												>
+													noted
+												</Badge>
+											) : (
+												<Badge
+													className="d-flex ms-2 me-2 align-self-center"
+													pill
+													bg="danger"
+												>
+													unnoted
+												</Badge>
+											)}
+										</Accordion.Header>
+										<Accordion.Body>
+											<Table
+												className="table-info"
+												striped
+												hover
+												bordered
+												size="sm"
+											>
+												<thead>
+													<tr>
+														{key[i].map((o, oi) => {
+															return (
+																<th key={oi}>
+																	{o}
+																</th>
+															);
+														})}
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														{key[i].map((o, oi) => {
+															return (
+																<td key={oi}>
+																	{
+																		s
+																			.JSONdata[
+																			o
+																		]
+																	}
+																</td>
+															);
+														})}
+													</tr>
+												</tbody>
+											</Table>
+										</Accordion.Body>
+									</Accordion.Item>
+								);
+							})}
+						</Accordion>
 					</Card.Body>
 				</Card>
 			)}

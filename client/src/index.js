@@ -2,55 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import LoginForm from "./loginform";
-import StudentPage from "./stdpage";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ProtectedRoutes from "./components/ProtectedRoutes";
-import Navbarr from "./components/navbar";
-import { Navigate } from "react-router-dom";
-import Eventdetail from "./eventdetail";
-import Staffpage from "./staff";
-import Evendtstaff from "./eventDTstaff";
-console.log(localStorage.getItem("jwttoken"));
-console.log(JSON.parse(localStorage.getItem("userinfo")));
-
-const user = JSON.parse(localStorage.getItem("userinfo"));
-
-const router = createBrowserRouter([
-	{
-		path: "/",
-		element:
-			user === null ? (
-				<Navigate to="/login" replace />
-			) : user?.role.name == "student" ? (
-				<Navigate to="/student" replace />
-			) : (
-				<Navigate to="/staff" replace />
-			),
-	},
-	{ path: "/login", element: <LoginForm /> },
-	{
-		element: <ProtectedRoutes />,
-		children: [
-			{
-				element: <Navbarr />,
-				children: [
-					{ path: "/student", element: <StudentPage /> },
-					{ path: "/staff", element: <Staffpage /> },
-					{ path: "/student/:slug", element: <Eventdetail /> },
-					{ path: "/staff/:slug", element: <Evendtstaff /> },
-					{ path: "*", element: <h1>err</h1> },
-				],
-			},
-		],
-	},
-]);
+import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 	<React.StrictMode>
-		<RouterProvider router={router} />
+		<App />
 	</React.StrictMode>
 );
 

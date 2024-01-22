@@ -20,7 +20,7 @@ function Navbarr() {
 				<Container>
 					<Navbar.Brand className="text-white">
 						<Link
-							to="/"
+							to={`/${info.role.name}`}
 							style={{
 								color: "white",
 								textDecoration: "none",

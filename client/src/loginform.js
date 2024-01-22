@@ -15,9 +15,9 @@ const LoginForm = () => {
 		setPassword(e.target.value);
 	};
 	useEffect(() => {
-		console.log("asas");
 		delete axios.defaults.headers.common["Authorization"];
 	}, []);
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setSubmitEnabled(false);
@@ -35,15 +35,9 @@ const LoginForm = () => {
 				{ headers: { Authorization: `Bearer ${result.data.jwt}` } }
 			);
 			localStorage.setItem("userinfo", JSON.stringify(result2.data));
-			if (result2.data.role) {
-				if (result2.data.role.name == "student") {
-					navigate("/student");
-				}
-				if (result2.data.role.name == "staff") {
-					navigate("/staff");
-				}
-			}
+			navigate(`/${result2.data.role.name}`);
 		} catch (e) {
+			console.log(e);
 			delete axios.defaults.headers.common["Authorization"];
 			localStorage.removeItem("userinfo");
 			localStorage.removeItem("jwttoken");
@@ -51,32 +45,41 @@ const LoginForm = () => {
 		}
 	};
 	return (
-		<Form onSubmit={handleSubmit}>
-			<Form.Group controlId="formBasicUsername">
-				<Form.Label>Username: </Form.Label>
-				<Form.Control
-					type="text"
-					placeholder="Enter username"
-					value={username}
-					onChange={handleUsernameChange}
-					required
-				/>
-			</Form.Group>
+		<>
+			<Form
+				className="pt-5 w-50 h-100 mx-auto text-white "
+				onSubmit={handleSubmit}
+			>
+				<Form.Group className="pt-5" controlId="formBasicUsername">
+					<Form.Label>Username: </Form.Label>
+					<Form.Control
+						type="text"
+						placeholder="Enter username"
+						value={username}
+						onChange={handleUsernameChange}
+						required
+					/>
+				</Form.Group>
 
-			<Form.Group controlId="formBasicPassword">
-				<Form.Label>Password: </Form.Label>
-				<Form.Control
-					type="password"
-					placeholder="Password"
-					value={password}
-					onChange={handlePasswordChange}
-					required
-				/>
-			</Form.Group>
-			<Button variant="primary" type="submit" disabled={!submitEnabled}>
-				Submit
-			</Button>
-		</Form>
+				<Form.Group controlId="formBasicPassword">
+					<Form.Label>Password: </Form.Label>
+					<Form.Control
+						type="password"
+						placeholder="Password"
+						value={password}
+						onChange={handlePasswordChange}
+						required
+					/>
+				</Form.Group>
+				<Button
+					variant="primary"
+					type="submit"
+					disabled={!submitEnabled}
+				>
+					log in
+				</Button>
+			</Form>
+		</>
 	);
 };
 

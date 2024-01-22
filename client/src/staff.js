@@ -8,6 +8,7 @@ import { json, useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import { Row, Col } from "react-bootstrap";
 import * as xlsx from "xlsx";
+import Spinner from "react-bootstrap/Spinner";
 function Staffpage() {
 	const [listevent, setlistevent] = useState([]);
 	const [show, setShow] = useState(false);
@@ -17,6 +18,8 @@ function Staffpage() {
 	const [validated, setValidated] = useState(false);
 	const [search, setsearch] = useState("");
 	const navigate = useNavigate();
+	const [geterror, seterror] = useState({});
+	const [loadind, setloading] = useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 	const readUploadFile = (e) => {
@@ -132,6 +135,7 @@ function Staffpage() {
 			const response = await axios.get(
 				"http://localhost:1337/api/events"
 			);
+			seterror(null);
 			if (!search) {
 				setpuredata(response.data.data);
 			} else {
@@ -142,147 +146,179 @@ function Staffpage() {
 				});
 				setpuredata(arrsearch);
 			}
+			setloading(false);
 		} catch (err) {
 			console.log(err);
+			if (err.response?.data) {
+				if (geterror) {
+					seterror(err.response.data.error);
+				}
+			} else {
+				seterror(err);
+			}
+			setloading(false);
 		}
 	};
 
 	useEffect(() => {
+		setloading(true);
 		const ac = axiosConfig;
 		fetchItems();
 	}, []);
 	return (
-		<Stack gap={3}>
-			<div className="d-flex justify-content-around w-100 mt-3">
-				<Button
-					style={{ marginLeft: "5px" }}
-					variant="primary"
-					className="d-flex p-1 "
-					onClick={handleShow}
-				>
-					Create
-				</Button>
-				<div className="invisible"></div>
-				<Form
-					onSubmit={handleSearch}
-					className="d-flex flex-row-reverse"
-				>
-					<Button type="submit" variant="success">
-						Search
-					</Button>
-					<Form.Control
-						onChange={(e) => {
-							setsearch(e.target.value);
-						}}
-						type="search"
-						placeholder="Search"
-						className="w-100 me-2"
-						aria-label="Search"
-					/>
-				</Form>
-			</div>
-			{listevent}
-			<Modal
-				className="bg-black bg-opacity-75"
-				size="lg"
-				centered
-				show={show}
-				onHide={handleClose}
-			>
-				<Modal.Header
+		<>
+			{loadind ? (
+				<Spinner
+					className="position-absolute top-50 start-50"
 					style={{
-						background: "rgb(164, 17, 222)",
-						color: "white",
-						WebkitTextStrokeWidth: "0.5px",
-						WebkitTextStrokeColor: "black",
+						width: "10rem",
+						height: "10rem",
+						borderWidth: "1rem",
 					}}
-					closeButton
-				>
-					<Modal.Title>Create</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form noValidate validated={validated}>
-						<Form.Group as={Row} className="mb-3">
-							<Form.Label column sm="2">
-								Name
-							</Form.Label>
-							<Col sm="10">
-								<Form.Control
-									name={"Name"}
-									onChange={handleChange}
-									type="text"
-									placeholder="*Exam999"
-									required
-								/>
-							</Col>
-						</Form.Group>
-						<Form.Group
-							as={Row}
-							className="mb-3"
-							controlId="exampleForm.ControlTextarea1"
+					size="lg"
+					animation="border"
+					variant="light"
+				/>
+			) : geterror ? (
+				<>
+					<h1>status : {geterror.status}</h1>
+					<h1>name :{geterror.name}</h1>
+					<h1>message : {geterror.message}</h1>
+				</>
+			) : (
+				<Stack gap={3}>
+					<div className="d-flex justify-content-around w-100 mt-3">
+						<Button
+							style={{ marginLeft: "5px" }}
+							variant="primary"
+							className="d-flex p-1 "
+							onClick={handleShow}
 						>
-							<Form.Label column sm="2">
-								Descpition
-							</Form.Label>
-							<Col sm="10">
-								<Form.Control
-									name={"Descpition"}
-									onChange={handleChange}
-									as="textarea"
-									required
-								/>
-							</Col>
-						</Form.Group>
-						<Form.Group
-							as={Row}
-							className="mb-3"
-							controlId="formFile"
+							Create
+						</Button>
+						<div className="invisible"></div>
+						<Form
+							onSubmit={handleSearch}
+							className="d-flex flex-row-reverse"
 						>
-							<Form.Label column sm="2">
-								Excel file
-							</Form.Label>
-							<Col sm="10">
-								<Form.Control
-									name={"Exfile"}
-									onChange={readUploadFile}
-									type="file"
-									required
-								/>
-							</Col>
-						</Form.Group>
-						<Form.Group as={Row} className="mb-3">
-							<Form.Label column sm="2">
-								Announcement
-							</Form.Label>
-							<Col sm="5">
-								<Form.Control
-									name={"time"}
-									onChange={handleChange}
-									type="time"
-									required
-								/>
-							</Col>
-							<Col sm="5">
-								<Form.Control
-									name={"date"}
-									onChange={handleChange}
-									type="date"
-									required
-								/>
-							</Col>
-						</Form.Group>
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
-						Close
-					</Button>
-					<Button onClick={handleSubmit} variant="primary">
-						Confirm
-					</Button>
-				</Modal.Footer>
-			</Modal>
-		</Stack>
+							<Button type="submit" variant="success">
+								Search
+							</Button>
+							<Form.Control
+								onChange={(e) => {
+									setsearch(e.target.value);
+								}}
+								type="search"
+								placeholder="Search"
+								className="w-100 me-2"
+								aria-label="Search"
+							/>
+						</Form>
+					</div>
+					{listevent}
+					<Modal
+						className="bg-black bg-opacity-75"
+						size="lg"
+						centered
+						show={show}
+						onHide={handleClose}
+					>
+						<Modal.Header
+							style={{
+								background: "rgb(164, 17, 222)",
+								color: "white",
+								WebkitTextStrokeWidth: "0.5px",
+								WebkitTextStrokeColor: "black",
+							}}
+							closeButton
+						>
+							<Modal.Title>Create</Modal.Title>
+						</Modal.Header>
+						<Modal.Body>
+							<Form noValidate validated={validated}>
+								<Form.Group as={Row} className="mb-3">
+									<Form.Label column sm="2">
+										Name
+									</Form.Label>
+									<Col sm="10">
+										<Form.Control
+											name={"Name"}
+											onChange={handleChange}
+											type="text"
+											placeholder="*Exam999"
+											required
+										/>
+									</Col>
+								</Form.Group>
+								<Form.Group
+									as={Row}
+									className="mb-3"
+									controlId="exampleForm.ControlTextarea1"
+								>
+									<Form.Label column sm="2">
+										Descpition
+									</Form.Label>
+									<Col sm="10">
+										<Form.Control
+											name={"Descpition"}
+											onChange={handleChange}
+											as="textarea"
+											required
+										/>
+									</Col>
+								</Form.Group>
+								<Form.Group
+									as={Row}
+									className="mb-3"
+									controlId="formFile"
+								>
+									<Form.Label column sm="2">
+										Excel file
+									</Form.Label>
+									<Col sm="10">
+										<Form.Control
+											name={"Exfile"}
+											onChange={readUploadFile}
+											type="file"
+											required
+										/>
+									</Col>
+								</Form.Group>
+								<Form.Group as={Row} className="mb-3">
+									<Form.Label column sm="2">
+										Announcement
+									</Form.Label>
+									<Col sm="5">
+										<Form.Control
+											name={"time"}
+											onChange={handleChange}
+											type="time"
+											required
+										/>
+									</Col>
+									<Col sm="5">
+										<Form.Control
+											name={"date"}
+											onChange={handleChange}
+											type="date"
+											required
+										/>
+									</Col>
+								</Form.Group>
+							</Form>
+						</Modal.Body>
+						<Modal.Footer>
+							<Button variant="secondary" onClick={handleClose}>
+								Close
+							</Button>
+							<Button onClick={handleSubmit} variant="primary">
+								Confirm
+							</Button>
+						</Modal.Footer>
+					</Modal>
+				</Stack>
+			)}
+		</>
 	);
 }
 export default Staffpage;
