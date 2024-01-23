@@ -9,9 +9,7 @@ import Staffpage from "./staff";
 import Evendtstaff from "./eventDTstaff";
 import { useState } from "react";
 function App() {
-	const [user, setuser] = useState(
-		JSON.parse(localStorage.getItem("userinfo"))
-	);
+	const [user, setuser] = useState(JSON.parse(localStorage.getItem("userinfo")));
 	const [login, setlogin] = useState(false);
 	const setu = () => setlogin(true);
 	const router = createBrowserRouter([

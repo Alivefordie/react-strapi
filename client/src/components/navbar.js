@@ -11,12 +11,7 @@ function Navbarr() {
 	const info = JSON.parse(localStorage.getItem("userinfo"));
 	return (
 		<>
-			<Navbar
-				style={{
-					background: "#332941",
-				}}
-				className="text-white"
-			>
+			<Navbar style={{ background: "#332941" }} className="text-white">
 				<Container>
 					<Navbar.Brand className="text-white">
 						<Link
@@ -25,8 +20,7 @@ function Navbarr() {
 								color: "white",
 								textDecoration: "none",
 								fontSize: "25px",
-							}}
-						>
+							}}>
 							Logo
 						</Link>
 					</Navbar.Brand>
@@ -35,20 +29,16 @@ function Navbarr() {
 						<NavDropdown
 							style={{ fontSize: "20px" }}
 							title={info.username}
-							id="navbarScrollingDropdown"
-						>
+							id="navbarScrollingDropdown">
 							<NavDropdown.Item>{info.usrId}</NavDropdown.Item>
 							<NavDropdown.Divider />
 							<NavDropdown.Item
 								onClick={() => {
 									localStorage.removeItem("userinfo");
 									localStorage.removeItem("jwttoken");
-									delete axios.defaults.headers.common[
-										"Authorization"
-									];
+									delete axios.defaults.headers.common["Authorization"];
 									navigate("/login");
-								}}
-							>
+								}}>
 								logout
 							</NavDropdown.Item>
 						</NavDropdown>

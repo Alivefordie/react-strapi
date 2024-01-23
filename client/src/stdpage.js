@@ -21,9 +21,7 @@ function StudentPage() {
 	};
 	const fetchItems = async () => {
 		try {
-			const response = await axios.get(
-				"http://localhost:1337/api/events/findbystd"
-			);
+			const response = await axios.get("http://localhost:1337/api/events/findbystd");
 			seterror(null);
 			if (!search) {
 				setpuredata(response.data.data);
@@ -61,11 +59,8 @@ function StudentPage() {
 					key={d.id}
 					slug={d.slug}
 					onClick={() => navigate(`/student/${d.slug}`)}
-					style={{ cursor: "pointer" }}
-				>
-					<Card.Header style={{ fontSize: "30px" }}>
-						{d.name}
-					</Card.Header>
+					style={{ cursor: "pointer" }}>
+					<Card.Header style={{ fontSize: "30px" }}>{d.name}</Card.Header>
 					<Card.Body className="border border-info">
 						<Card.Text>{d.description}</Card.Text>
 					</Card.Body>
@@ -95,10 +90,7 @@ function StudentPage() {
 				</>
 			) : (
 				<Stack gap={3}>
-					<Form
-						onSubmit={handleSearch}
-						className="d-flex flex-row-reverse mt-3 me-3"
-					>
+					<Form onSubmit={handleSearch} className="d-flex flex-row-reverse mt-3 me-3">
 						<Button type="submit" variant="success">
 							Search
 						</Button>

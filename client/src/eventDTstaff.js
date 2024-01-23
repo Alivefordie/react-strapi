@@ -21,23 +21,18 @@ function Evendtstaff() {
 	const cancel = () => setedit(!edit);
 	const editname = async () => {
 		if (edit) {
-			const newres = await axios.put(
-				`http://localhost:1337/api/events/${param.slug}`,
-				{
-					data: {
-						name: listevent.name,
-					},
-				}
-			);
+			const newres = await axios.put(`http://localhost:1337/api/events/${param.slug}`, {
+				data: {
+					name: listevent.name,
+				},
+			});
 			navigate(`/staff/${newres.data.data.slug}`);
 		}
 		setedit(!edit);
 	};
 	const fetchItems = async () => {
 		try {
-			const response = await axios.get(
-				`http://localhost:1337/api/events/${param.slug}`
-			);
+			const response = await axios.get(`http://localhost:1337/api/events/${param.slug}`);
 			const event = response.data.data;
 			seterror(null);
 			setlistevent({ ...event });
@@ -95,8 +90,7 @@ function Evendtstaff() {
 					bg="dark"
 					className="mt-3 w-75 mx-auto text-white "
 					key={listevent.id}
-					slug={listevent.slug}
-				>
+					slug={listevent.slug}>
 					<Card.Header className="d-flex justify-content-between">
 						{edit ? (
 							<Form>
@@ -113,27 +107,17 @@ function Evendtstaff() {
 								/>
 							</Form>
 						) : (
-							<Card.Text
-								style={{ fontSize: "30px" }}
-								className="mb-0 "
-							>
+							<Card.Text style={{ fontSize: "30px" }} className="mb-0 ">
 								{listevent.name}
 							</Card.Text>
 						)}
 						<div className="d-flex align-self-center">
 							{edit ? (
 								<>
-									<Button
-										variant="secondary"
-										onClick={cancel}
-									>
+									<Button variant="secondary" onClick={cancel}>
 										Cancel
 									</Button>
-									<Button
-										className="ms-2"
-										variant="success"
-										onClick={editname}
-									>
+									<Button className="ms-2" variant="success" onClick={editname}>
 										Confirm
 									</Button>
 								</>
@@ -160,76 +144,39 @@ function Evendtstaff() {
 								return (
 									<Accordion.Item eventKey={i} key={i}>
 										<Accordion.Header className="d-flex justify-content-between">
-											<div className="d-flex me-auto ">
-												{s.label}
-											</div>
+											<div className="d-flex me-auto ">{s.label}</div>
 											{s.seen ? (
-												<Badge
-													className="d-flex me-2 align-self-center"
-													pill
-													bg="success"
-												>
+												<Badge className="d-flex me-2 align-self-center" pill bg="success">
 													seen
 												</Badge>
 											) : (
-												<Badge
-													className="d-flex ms-auto me-2 "
-													pill
-													bg="danger"
-												>
+												<Badge className="d-flex ms-auto me-2 " pill bg="danger">
 													unseen
 												</Badge>
 											)}
 											{s.noted ? (
-												<Badge
-													className="d-flex ms-2 me-2 align-self-center"
-													pill
-													bg="success"
-												>
+												<Badge className="d-flex ms-2 me-2 align-self-center" pill bg="success">
 													noted
 												</Badge>
 											) : (
-												<Badge
-													className="d-flex ms-2 me-2 align-self-center"
-													pill
-													bg="danger"
-												>
+												<Badge className="d-flex ms-2 me-2 align-self-center" pill bg="danger">
 													unnoted
 												</Badge>
 											)}
 										</Accordion.Header>
 										<Accordion.Body>
-											<Table
-												className="table-info"
-												striped
-												hover
-												bordered
-												size="sm"
-											>
+											<Table className="table-info" striped hover bordered size="sm">
 												<thead>
 													<tr>
 														{key[i].map((o, oi) => {
-															return (
-																<th key={oi}>
-																	{o}
-																</th>
-															);
+															return <th key={oi}>{o}</th>;
 														})}
 													</tr>
 												</thead>
 												<tbody>
 													<tr>
 														{key[i].map((o, oi) => {
-															return (
-																<td key={oi}>
-																	{
-																		s
-																			.JSONdata[
-																			o
-																		]
-																	}
-																</td>
-															);
+															return <td key={oi}>{s.JSONdata[o]}</td>;
 														})}
 													</tr>
 												</tbody>

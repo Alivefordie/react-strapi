@@ -3,9 +3,7 @@ import axios from "axios";
 const axiosConfig = axios.interceptors.request.use(
 	(request) => {
 		if (localStorage.getItem("jwttoken")) {
-			axios.defaults.headers.common[
-				"Authorization"
-			] = `Bearer ${localStorage.getItem("jwttoken")}`;
+			axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("jwttoken")}`;
 		}
 		return request;
 	},

@@ -21,9 +21,7 @@ function Evendetail() {
 	const checkseen = async (s) => {
 		try {
 			if (s == null) {
-				await axios.put(
-					`http://localhost:1337/api/events/${param.slug}/seen`
-				);
+				await axios.put(`http://localhost:1337/api/events/${param.slug}/seen`);
 				fetchItems();
 			}
 		} catch (error) {
@@ -32,9 +30,7 @@ function Evendetail() {
 	};
 	const checknote = async () => {
 		try {
-			await axios.put(
-				`http://localhost:1337/api/events/${param.slug}/noted`
-			);
+			await axios.put(`http://localhost:1337/api/events/${param.slug}/noted`);
 			fetchItems();
 		} catch (error) {
 			console.log(error);
@@ -120,49 +116,27 @@ function Evendetail() {
 					bg="dark"
 					className="mt-3 w-75 mx-auto text-white "
 					key={listevent.id}
-					slug={listevent.slug}
-				>
+					slug={listevent.slug}>
 					<Card.Header className="d-flex justify-content-between">
-						<Card.Text
-							style={{ fontSize: "30px" }}
-							className="mb-0 "
-						>
+						<Card.Text style={{ fontSize: "30px" }} className="mb-0 ">
 							{listevent.name}
 						</Card.Text>
 						<div className="d-flex align-self-center">
-							<Card.Text
-								style={{ fontSize: "20px" }}
-								className="mb-0"
-							>
+							<Card.Text style={{ fontSize: "20px" }} className="mb-0">
 								seen :{" "}
 							</Card.Text>
 							{seen ? (
-								<Badge
-									className="align-self-center"
-									pill
-									bg="success"
-								>
+								<Badge className="align-self-center" pill bg="success">
 									check
 								</Badge>
 							) : (
-								<Spinner
-									className="mt-0"
-									animation="grow"
-									variant="light"
-								/>
+								<Spinner className="mt-0" animation="grow" variant="light" />
 							)}
-							<Card.Text
-								style={{ fontSize: "20px" }}
-								className="mb-0"
-							>
+							<Card.Text style={{ fontSize: "20px" }} className="mb-0">
 								noted :{" "}
 							</Card.Text>
 							{note ? (
-								<Badge
-									className="align-self-center"
-									pill
-									bg="success"
-								>
+								<Badge className="align-self-center" pill bg="success">
 									check
 								</Badge>
 							) : (
@@ -181,28 +155,16 @@ function Evendetail() {
 							bg="dark"
 							className="flex-fill w-50 text-white"
 							key={listevent.id}
-							slug={listevent.slug}
-						>
-							<Card.Header>
-								{key ? score.label : "no announcement"}
-							</Card.Header>
+							slug={listevent.slug}>
+							<Card.Header>{key ? score.label : "no announcement"}</Card.Header>
 							<Card.Body className="border border-danger">
 								{key ? (
-									<Table
-										className={`table-${theme}`}
-										striped
-										hover
-										bordered
-										size="sm"
-									>
+									<Table className={`table-${theme}`} striped hover bordered size="sm">
 										<thead>
 											<tr>
 												{key.map((o, i) => {
 													return (
-														<th
-															className={`bg-${theme}`}
-															key={i}
-														>
+														<th className={`bg-${theme}`} key={i}>
 															{o}
 														</th>
 													);
@@ -212,19 +174,13 @@ function Evendetail() {
 										<tbody>
 											<tr>
 												{key.map((o, i) => {
-													return (
-														<td key={i}>
-															{score.JSONdata[o]}
-														</td>
-													);
+													return <td key={i}>{score.JSONdata[o]}</td>;
 												})}
 											</tr>
 										</tbody>
 									</Table>
 								) : (
-									<Card.Text>
-										ask staff for more information...
-									</Card.Text>
+									<Card.Text>ask staff for more information...</Card.Text>
 								)}
 							</Card.Body>
 						</Card>

@@ -22,18 +22,14 @@ const LoginForm = () => {
 		e.preventDefault();
 		setSubmitEnabled(false);
 		try {
-			const result = await axios.post(
-				"http://localhost:1337/api/auth/local",
-				{
-					identifier: username,
-					password: password,
-				}
-			);
+			const result = await axios.post("http://localhost:1337/api/auth/local", {
+				identifier: username,
+				password: password,
+			});
 			localStorage.setItem("jwttoken", result.data.jwt);
-			const result2 = await axios.get(
-				"http://localhost:1337/api/users/me?populate=role",
-				{ headers: { Authorization: `Bearer ${result.data.jwt}` } }
-			);
+			const result2 = await axios.get("http://localhost:1337/api/users/me?populate=role", {
+				headers: { Authorization: `Bearer ${result.data.jwt}` },
+			});
 			localStorage.setItem("userinfo", JSON.stringify(result2.data));
 			navigate(`/${result2.data.role.name}`);
 		} catch (e) {
@@ -46,10 +42,7 @@ const LoginForm = () => {
 	};
 	return (
 		<>
-			<Form
-				className="pt-5 w-50 h-100 mx-auto text-white "
-				onSubmit={handleSubmit}
-			>
+			<Form className="pt-5 w-50 h-100 mx-auto text-white " onSubmit={handleSubmit}>
 				<Form.Group className="pt-5" controlId="formBasicUsername">
 					<Form.Label>Username: </Form.Label>
 					<Form.Control
@@ -71,11 +64,7 @@ const LoginForm = () => {
 						required
 					/>
 				</Form.Group>
-				<Button
-					variant="primary"
-					type="submit"
-					disabled={!submitEnabled}
-				>
+				<Button variant="primary" type="submit" disabled={!submitEnabled}>
 					log in
 				</Button>
 			</Form>

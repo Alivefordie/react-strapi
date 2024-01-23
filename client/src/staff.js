@@ -53,11 +53,8 @@ function Staffpage() {
 					key={d.id}
 					slug={d.slug}
 					onClick={() => navigate(`/staff/${d.slug}`)}
-					style={{ cursor: "pointer" }}
-				>
-					<Card.Header style={{ fontSize: "30px" }}>
-						{d.name}
-					</Card.Header>
+					style={{ cursor: "pointer" }}>
+					<Card.Header style={{ fontSize: "30px" }}>{d.name}</Card.Header>
 					<Card.Body className="border border-info">
 						<Card.Text>{d.description}</Card.Text>
 					</Card.Body>
@@ -106,20 +103,17 @@ function Staffpage() {
 						["student"]: idu[0] ? idu[0].id : null,
 					};
 				});
-				const ok = await axios.post(
-					"http://localhost:1337/api/events",
-					{
-						data: {
-							name: data.Name,
-							description: data.Descpition,
-							datedeploy: t2.toISOString(),
-							// not public
-							// publishedAt: null,
-							// publishedAt: t2.toISOString(), if real deploy
-							scores: all,
-						},
-					}
-				);
+				const ok = await axios.post("http://localhost:1337/api/events", {
+					data: {
+						name: data.Name,
+						description: data.Descpition,
+						datedeploy: t2.toISOString(),
+						// not public
+						// publishedAt: null,
+						// publishedAt: t2.toISOString(), if real deploy
+						scores: all,
+					},
+				});
 				navigate(`/staff/${ok.data.data.slug}`);
 			} catch (err) {
 				console.log(err);
@@ -130,9 +124,7 @@ function Staffpage() {
 	};
 	const fetchItems = async () => {
 		try {
-			const response = await axios.get(
-				"http://localhost:1337/api/events"
-			);
+			const response = await axios.get("http://localhost:1337/api/events");
 			seterror(null);
 			if (!search) {
 				setpuredata(response.data.data);
@@ -190,15 +182,11 @@ function Staffpage() {
 							style={{ marginLeft: "5px" }}
 							variant="primary"
 							className="d-flex p-1 "
-							onClick={handleShow}
-						>
+							onClick={handleShow}>
 							Create
 						</Button>
 						<div className="invisible"></div>
-						<Form
-							onSubmit={handleSearch}
-							className="d-flex flex-row-reverse"
-						>
+						<Form onSubmit={handleSearch} className="d-flex flex-row-reverse">
 							<Button type="submit" variant="success">
 								Search
 							</Button>
@@ -219,8 +207,7 @@ function Staffpage() {
 						size="lg"
 						centered
 						show={show}
-						onHide={handleClose}
-					>
+						onHide={handleClose}>
 						<Modal.Header
 							style={{
 								background: "rgb(164, 17, 222)",
@@ -228,8 +215,7 @@ function Staffpage() {
 								WebkitTextStrokeWidth: "0.5px",
 								WebkitTextStrokeColor: "black",
 							}}
-							closeButton
-						>
+							closeButton>
 							<Modal.Title>Create</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
@@ -248,11 +234,7 @@ function Staffpage() {
 										/>
 									</Col>
 								</Form.Group>
-								<Form.Group
-									as={Row}
-									className="mb-3"
-									controlId="exampleForm.ControlTextarea1"
-								>
+								<Form.Group as={Row} className="mb-3" controlId="exampleForm.ControlTextarea1">
 									<Form.Label column sm="2">
 										Descpition
 									</Form.Label>
@@ -265,21 +247,12 @@ function Staffpage() {
 										/>
 									</Col>
 								</Form.Group>
-								<Form.Group
-									as={Row}
-									className="mb-3"
-									controlId="formFile"
-								>
+								<Form.Group as={Row} className="mb-3" controlId="formFile">
 									<Form.Label column sm="2">
 										Excel file
 									</Form.Label>
 									<Col sm="10">
-										<Form.Control
-											name={"Exfile"}
-											onChange={readUploadFile}
-											type="file"
-											required
-										/>
+										<Form.Control name={"Exfile"} onChange={readUploadFile} type="file" required />
 									</Col>
 								</Form.Group>
 								<Form.Group as={Row} className="mb-3">
@@ -287,20 +260,10 @@ function Staffpage() {
 										Announcement
 									</Form.Label>
 									<Col sm="5">
-										<Form.Control
-											name={"time"}
-											onChange={handleChange}
-											type="time"
-											required
-										/>
+										<Form.Control name={"time"} onChange={handleChange} type="time" required />
 									</Col>
 									<Col sm="5">
-										<Form.Control
-											name={"date"}
-											onChange={handleChange}
-											type="date"
-											required
-										/>
+										<Form.Control name={"date"} onChange={handleChange} type="date" required />
 									</Col>
 								</Form.Group>
 							</Form>
