@@ -10,14 +10,12 @@ const LoginForm = () => {
 	const handleUsernameChange = (e) => {
 		setUsername(e.target.value);
 	};
-
 	const handlePasswordChange = (e) => {
 		setPassword(e.target.value);
 	};
 	useEffect(() => {
 		delete axios.defaults.headers.common["Authorization"];
 	}, []);
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setSubmitEnabled(false);
@@ -53,7 +51,6 @@ const LoginForm = () => {
 						required
 					/>
 				</Form.Group>
-
 				<Form.Group controlId="formBasicPassword">
 					<Form.Label>Password: </Form.Label>
 					<Form.Control

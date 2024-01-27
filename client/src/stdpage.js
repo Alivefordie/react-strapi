@@ -1,18 +1,21 @@
-import Stack from "react-bootstrap/Stack";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import Card from "react-bootstrap/Card";
-import { Form, Button } from "react-bootstrap";
 import axiosConfig from "./axios-intercepter";
+import { Form, Button, Stack, Spinner, Card } from "react-bootstrap";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Spinner from "react-bootstrap/Spinner";
 function StudentPage() {
-	const [listevent, setlistevent] = useState([]);
 	const navigate = useNavigate();
 	const [geterror, seterror] = useState({});
 	const [loadind, setloading] = useState(false);
 	const [puredata, setpuredata] = useState([]);
 	const [search, setsearch] = useState("");
+	const er = (
+		<>
+			<h1>status : {geterror?.status}</h1>
+			<h1>name :{geterror?.name}</h1>
+			<h1>message : {geterror?.message}</h1>
+		</>
+	);
 	const handleSearch = (e) => {
 		e.preventDefault();
 		if (search) {
@@ -49,25 +52,6 @@ function StudentPage() {
 		const ac = axiosConfig;
 		fetchItems();
 	}, []);
-	useEffect(() => {
-		setlistevent(
-			puredata.map((d) => (
-				<Card
-					border="info"
-					bg="dark"
-					className="w-75 mx-auto text-white"
-					key={d.id}
-					slug={d.slug}
-					onClick={() => navigate(`/student/${d.slug}`)}
-					style={{ cursor: "pointer" }}>
-					<Card.Header style={{ fontSize: "30px" }}>{d.name}</Card.Header>
-					<Card.Body className="border border-info">
-						<Card.Text>{d.description}</Card.Text>
-					</Card.Body>
-				</Card>
-			))
-		);
-	}, [puredata]);
 	return (
 		<>
 			{loadind ? (
@@ -83,11 +67,7 @@ function StudentPage() {
 					variant="light"
 				/>
 			) : geterror ? (
-				<>
-					<h1>status : {geterror.status}</h1>
-					<h1>name :{geterror.name}</h1>
-					<h1>message : {geterror.message}</h1>
-				</>
+				er
 			) : (
 				<Stack gap={3}>
 					<Form onSubmit={handleSearch} className="d-flex flex-row-reverse mt-3 me-3">
@@ -104,7 +84,21 @@ function StudentPage() {
 							aria-label="Search"
 						/>
 					</Form>
-					{listevent}
+					{puredata.map((d) => (
+						<Card
+							border="info"
+							bg="dark"
+							className="w-75 mx-auto text-white"
+							key={d.id}
+							slug={d.slug}
+							onClick={() => navigate(`/student/${d.slug}`)}
+							style={{ cursor: "pointer" }}>
+							<Card.Header style={{ fontSize: "30px" }}>{d.name}</Card.Header>
+							<Card.Body className="border border-info">
+								<Card.Text>{d.description}</Card.Text>
+							</Card.Body>
+						</Card>
+					))}
 				</Stack>
 			)}
 		</>

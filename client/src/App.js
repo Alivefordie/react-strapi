@@ -9,9 +9,7 @@ import Staffpage from "./staff";
 import Evendtstaff from "./eventDTstaff";
 import { useState } from "react";
 function App() {
-	const [user, setuser] = useState(JSON.parse(localStorage.getItem("userinfo")));
 	const [login, setlogin] = useState(false);
-	const setu = () => setlogin(true);
 	const router = createBrowserRouter([
 		{
 			path: "/",
@@ -28,7 +26,7 @@ function App() {
 						{ path: "/staff", element: <Staffpage /> },
 						{ path: "/student/:slug", element: <Eventdetail /> },
 						{ path: "/staff/:slug", element: <Evendtstaff /> },
-						{ path: "*", element: <h1>err</h1> },
+						{ path: "*", element: <h1>error</h1> },
 					],
 				},
 			],

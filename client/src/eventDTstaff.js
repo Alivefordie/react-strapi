@@ -1,23 +1,27 @@
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useState, useEffect, Fragment } from "react";
-import Card from "react-bootstrap/Card";
-import { Form, Button, Badge } from "react-bootstrap";
 import axiosConfig from "./axios-intercepter";
-import { useParams } from "react-router-dom";
-import Table from "react-bootstrap/Table";
-import Spinner from "react-bootstrap/Spinner";
-import { Accordion } from "react-bootstrap";
+import { Form, Button, Badge, Accordion, Card, Spinner } from "react-bootstrap";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import React from "react";
 import "./eventdettstaff.css";
+import Scoretable from "./components/scoretable";
 function Evendtstaff() {
 	const [listevent, setlistevent] = useState([]);
 	const [loadind, setloading] = useState(false);
 	const [edit, setedit] = useState(false);
 	const [geterror, seterror] = useState({});
-	const [key, setkey] = useState([]);
+	const [key, setkey] = useState(null);
+	const [value, setvalue] = useState(null);
 	const navigate = useNavigate();
 	const param = useParams();
+	const er = (
+		<>
+			<h1>status : {geterror?.status}</h1>
+			<h1>name :{geterror?.name}</h1>
+			<h1>message : {geterror?.message}</h1>
+		</>
+	);
 	const cancel = () => setedit(!edit);
 	const editname = async () => {
 		if (edit) {
@@ -36,10 +40,10 @@ function Evendtstaff() {
 			const event = response.data.data;
 			seterror(null);
 			setlistevent({ ...event });
-			const scores = event.scores.map((s) => {
-				return Object.keys(s.JSONdata);
-			});
-			setkey(scores);
+			const keys = event.scores.map((s) => Object.keys(s.JSONdata));
+			const values = event.scores.map((s) => Object.values(s.JSONdata));
+			setkey(keys);
+			setvalue(values);
 			return event;
 		} catch (err) {
 			console.log(err);
@@ -79,11 +83,7 @@ function Evendtstaff() {
 					variant="light"
 				/>
 			) : geterror ? (
-				<>
-					<h1>status : {geterror.status}</h1>
-					<h1>name :{geterror.name}</h1>
-					<h1>message : {geterror.message}</h1>
-				</>
+				er
 			) : (
 				<Card
 					border="info"
@@ -91,7 +91,7 @@ function Evendtstaff() {
 					className="mt-3 w-75 mx-auto text-white "
 					key={listevent.id}
 					slug={listevent.slug}>
-					<Card.Header className="d-flex justify-content-between">
+					<Card.Header className=" d-flex justify-content-between">
 						{edit ? (
 							<Form>
 								<Form.Control
@@ -99,10 +99,7 @@ function Evendtstaff() {
 									value={listevent.name}
 									required
 									onChange={(e) => {
-										setlistevent({
-											...listevent,
-											["name"]: e.target.value,
-										});
+										setlistevent({ ...listevent, ["name"]: e.target.value });
 									}}
 								/>
 							</Form>
@@ -126,65 +123,59 @@ function Evendtstaff() {
 							)}
 						</div>
 					</Card.Header>
-					<Card.Body className="border border-info ">
-						<div className="d-flex">
-							<Card.Text className="flex-fill w-50">
+					<Card.Body className=" border border-info ">
+						<div className="d-flex justify-content-between">
+							<Card.Text className="flex-fill pe-3 w-50">
 								รายละเอียด :
 								<br />
 								{listevent.description}
 							</Card.Text>
-							<Card.Text className="flex-fill w-50">
-								วันประกาศ :
+							<Card.Text className="w-25">
+								สถานะ :{"   "}
+								{listevent.publishedAt ? (
+									<Badge pill bg="success">
+										Public
+									</Badge>
+								) : (
+									<Badge pill bg="danger">
+										Not Public
+									</Badge>
+								)}
 								<br />
-								{new Date(listevent.datedeploy).toString()}
+								วันและเวลาที่ประกาศ :
+								<br />
+								{new Date(listevent.publishedAt).toLocaleString()}
 							</Card.Text>
 						</div>
-						<Accordion alwaysOpen data-bs-theme="dark">
-							{listevent.scores.map((s, i) => {
-								return (
-									<Accordion.Item eventKey={i} key={i}>
-										<Accordion.Header className="d-flex justify-content-between">
-											<div className="d-flex me-auto ">{s.label}</div>
-											{s.seen ? (
-												<Badge className="d-flex me-2 align-self-center" pill bg="success">
-													seen
-												</Badge>
-											) : (
-												<Badge className="d-flex ms-auto me-2 " pill bg="danger">
-													unseen
-												</Badge>
-											)}
-											{s.noted ? (
-												<Badge className="d-flex ms-2 me-2 align-self-center" pill bg="success">
-													noted
-												</Badge>
-											) : (
-												<Badge className="d-flex ms-2 me-2 align-self-center" pill bg="danger">
-													unnoted
-												</Badge>
-											)}
-										</Accordion.Header>
-										<Accordion.Body>
-											<Table className="table-info" striped hover bordered size="sm">
-												<thead>
-													<tr>
-														{key[i].map((o, oi) => {
-															return <th key={oi}>{o}</th>;
-														})}
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														{key[i].map((o, oi) => {
-															return <td key={oi}>{s.JSONdata[o]}</td>;
-														})}
-													</tr>
-												</tbody>
-											</Table>
-										</Accordion.Body>
-									</Accordion.Item>
-								);
-							})}
+						<Accordion className="mt-3" alwaysOpen data-bs-theme="dark">
+							{listevent.scores.map((s, i) => (
+								<Accordion.Item eventKey={i} key={i}>
+									<Accordion.Header className="d-flex justify-content-between">
+										<div className="d-flex me-auto ">{s.label}</div>
+										{s.seen ? (
+											<Badge className="d-flex me-2 align-self-center" pill bg="success">
+												seen
+											</Badge>
+										) : (
+											<Badge className="d-flex ms-auto me-2 " pill bg="danger">
+												unseen
+											</Badge>
+										)}
+										{s.noted ? (
+											<Badge className="d-flex ms-2 me-2 align-self-center" pill bg="success">
+												noted
+											</Badge>
+										) : (
+											<Badge className="d-flex ms-2 me-2 align-self-center" pill bg="danger">
+												unnoted
+											</Badge>
+										)}
+									</Accordion.Header>
+									<Accordion.Body>
+										<Scoretable keydata={key[i]} value={value[i]} />
+									</Accordion.Body>
+								</Accordion.Item>
+							))}
 						</Accordion>
 					</Card.Body>
 				</Card>

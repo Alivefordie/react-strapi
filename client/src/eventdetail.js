@@ -1,13 +1,9 @@
-import Stack from "react-bootstrap/Stack";
 import axios from "axios";
-import { useState, useEffect, Fragment } from "react";
-import Card from "react-bootstrap/Card";
-import { Form, Button } from "react-bootstrap";
 import axiosConfig from "./axios-intercepter";
+import { Button, Card, Spinner, Badge } from "react-bootstrap";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Table from "react-bootstrap/Table";
-import Spinner from "react-bootstrap/Spinner";
-import Badge from "react-bootstrap/Badge";
+import Scorecard from "./components/scorecard";
 function Evendetail() {
 	const [listevent, setlistevent] = useState([]);
 	const [score, setscore] = useState({});
@@ -15,9 +11,14 @@ function Evendetail() {
 	const [note, setnote] = useState(null);
 	const [geterror, seterror] = useState({});
 	const [loadind, setloading] = useState(false);
-	const [theme, settheme] = useState("info");
-	const [key, setkey] = useState(null);
 	const param = useParams();
+	const er = (
+		<>
+			<h1>status : {geterror?.status}</h1>
+			<h1>name :{geterror?.name}</h1>
+			<h1>message : {geterror?.message}</h1>
+		</>
+	);
 	const checkseen = async (s) => {
 		try {
 			if (s == null) {
@@ -36,7 +37,6 @@ function Evendetail() {
 			console.log(error);
 		}
 	};
-
 	const fetchItems = async () => {
 		try {
 			const ac = axiosConfig;
@@ -49,20 +49,6 @@ function Evendetail() {
 			setscore({ ...score });
 			setnote(score.noted);
 			setseen(score.seen);
-			if (score.JSONdata) {
-				const k = Object.keys(score.JSONdata);
-				setkey(k);
-				const rsc = score.JSONdata[k[1]];
-				if (!isNaN(rsc)) {
-					if (rsc >= 75) {
-						settheme("success");
-					} else if (rsc >= 50) {
-						settheme("secondary");
-					} else {
-						settheme("danger");
-					}
-				}
-			}
 			setlistevent({ ...event });
 			return score;
 		} catch (err) {
@@ -75,7 +61,6 @@ function Evendetail() {
 			setloading(false);
 		}
 	};
-
 	useEffect(() => {
 		const fetchdata = async () => {
 			setloading(true);
@@ -89,34 +74,20 @@ function Evendetail() {
 		};
 		fetchdata();
 	}, []);
-
 	return (
 		<>
 			{loadind ? (
 				<Spinner
 					className="position-absolute top-50 start-50"
-					style={{
-						width: "10rem",
-						height: "10rem",
-						borderWidth: "1rem",
-					}}
+					style={{ width: "10rem", height: "10rem", borderWidth: "1rem" }}
 					size="lg"
 					animation="border"
 					variant="light"
 				/>
 			) : geterror ? (
-				<>
-					<h1>status : {geterror.status}</h1>
-					<h1>name :{geterror.name}</h1>
-					<h1>message : {geterror.message}</h1>
-				</>
+				er
 			) : (
-				<Card
-					border="info"
-					bg="dark"
-					className="mt-3 w-75 mx-auto text-white "
-					key={listevent.id}
-					slug={listevent.slug}>
+				<Card border="info" bg="dark" className="mt-3 w-75 mx-auto text-white ">
 					<Card.Header className="d-flex justify-content-between">
 						<Card.Text style={{ fontSize: "30px" }} className="mb-0 ">
 							{listevent.name}
@@ -150,40 +121,7 @@ function Evendetail() {
 							<br />
 							{listevent.description}
 						</Card.Text>
-						<Card
-							border="danger"
-							bg="dark"
-							className="flex-fill w-50 text-white"
-							key={listevent.id}
-							slug={listevent.slug}>
-							<Card.Header>{key ? score.label : "no announcement"}</Card.Header>
-							<Card.Body className="border border-danger">
-								{key ? (
-									<Table className={`table-${theme}`} striped hover bordered size="sm">
-										<thead>
-											<tr>
-												{key.map((o, i) => {
-													return (
-														<th className={`bg-${theme}`} key={i}>
-															{o}
-														</th>
-													);
-												})}
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												{key.map((o, i) => {
-													return <td key={i}>{score.JSONdata[o]}</td>;
-												})}
-											</tr>
-										</tbody>
-									</Table>
-								) : (
-									<Card.Text>ask staff for more information...</Card.Text>
-								)}
-							</Card.Body>
-						</Card>
+						<Scorecard score={score} />
 					</Card.Body>
 				</Card>
 			)}
