@@ -20,9 +20,7 @@ function Staffpage() {
 	);
 	const handleSearch = (e) => {
 		e.preventDefault();
-		if (search) {
-			fetchItems();
-		}
+		fetchItems();
 	};
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);

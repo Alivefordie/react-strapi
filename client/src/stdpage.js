@@ -18,9 +18,7 @@ function StudentPage() {
 	);
 	const handleSearch = (e) => {
 		e.preventDefault();
-		if (search) {
-			fetchItems();
-		}
+		fetchItems();
 	};
 	const fetchItems = async () => {
 		try {

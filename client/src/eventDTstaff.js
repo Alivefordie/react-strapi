@@ -34,6 +34,10 @@ function Evendtstaff() {
 		}
 		setedit(!edit);
 	};
+	const handledelete = async () => {
+		await axios.delete(`http://localhost:1337/api/events/${param.slug}`);
+		navigate("/staff");
+	};
 	const fetchItems = async () => {
 		try {
 			const response = await axios.get(`http://localhost:1337/api/events/${param.slug}`);
@@ -44,7 +48,7 @@ function Evendtstaff() {
 			const values = event.scores.map((s) => Object.values(s.JSONdata));
 			setkey(keys);
 			setvalue(values);
-			return event;
+			setloading(false);
 		} catch (err) {
 			console.log(err);
 			if (err.response?.data) {
@@ -57,15 +61,9 @@ function Evendtstaff() {
 	};
 
 	useEffect(() => {
-		const fetchdata = async () => {
-			setloading(true);
-			const ac = axiosConfig;
-			const res = await fetchItems();
-			if (res) {
-				setloading(false);
-			}
-		};
-		fetchdata();
+		setloading(true);
+		const ac = axiosConfig;
+		fetchItems();
 	}, []);
 
 	return (
@@ -119,7 +117,12 @@ function Evendtstaff() {
 									</Button>
 								</>
 							) : (
-								<Button onClick={editname}>Edit</Button>
+								<>
+									<Button onClick={handledelete} variant="danger" className="me-1">
+										Delete
+									</Button>
+									<Button onClick={editname}>Edit</Button>
+								</>
 							)}
 						</div>
 					</Card.Header>

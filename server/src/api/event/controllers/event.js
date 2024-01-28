@@ -29,7 +29,6 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
     return this.transformResponse(sanitizedResults);
   },
   async create(ctx) {
-    await this.validateQuery(ctx);
     const response = await super.create(ctx);
     const slg = await strapi
       .service("plugin::content-manager.uid")

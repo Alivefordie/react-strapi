@@ -6,7 +6,7 @@ import * as xlsx from "xlsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosConfig from "../axios-intercepter";
-function Createmodal({ show, handleClose, handleShow }) {
+function Createmodal({ show, handleClose }) {
 	const [data, setdata] = useState({});
 	const [jff, setjff] = useState(null);
 	const [validated, setValidated] = useState(false);
@@ -75,7 +75,9 @@ function Createmodal({ show, handleClose, handleShow }) {
 						scores: all,
 					},
 				});
-				navigate(`/staff/${ok.data.data.slug}`);
+				if (ok) {
+					navigate(`/staff/${ok.data.data.slug}`);
+				}
 			} catch (err) {
 				console.log(err);
 			}
