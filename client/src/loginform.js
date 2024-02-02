@@ -40,7 +40,10 @@ const LoginForm = () => {
 	};
 	return (
 		<>
-			<Form className="pt-5 w-50 h-100 mx-auto text-white " onSubmit={handleSubmit}>
+			<img
+				className="mx-auto d-flex pt-5"
+				src="https://cdn.iconscout.com/icon/free/png-256/free-user-1648810-1401302.png?f=webp"></img>
+			<Form className="w-50 h-100 mx-auto text-white " onSubmit={handleSubmit}>
 				<Form.Group className="pt-5" controlId="formBasicUsername">
 					<Form.Label>Username: </Form.Label>
 					<Form.Control

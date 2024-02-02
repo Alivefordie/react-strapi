@@ -12,6 +12,7 @@ function Evendtstaff() {
 	const [edit, setedit] = useState(false);
 	const [geterror, seterror] = useState({});
 	const [key, setkey] = useState(null);
+	const [oldedit, setoldedit] = useState(null);
 	const [value, setvalue] = useState(null);
 	const navigate = useNavigate();
 	const param = useParams();
@@ -22,8 +23,12 @@ function Evendtstaff() {
 			<h1>message : {geterror?.message}</h1>
 		</>
 	);
-	const cancel = () => setedit(!edit);
+	const cancel = () => {
+		setlistevent({ ...oldedit });
+		setedit(!edit);
+	};
 	const editname = async () => {
+		setoldedit({ ...listevent });
 		if (edit) {
 			const newres = await axios.put(`http://localhost:1337/api/events/${param.slug}`, {
 				data: {
@@ -147,7 +152,7 @@ function Evendtstaff() {
 								<br />
 								วันและเวลาที่ประกาศ :
 								<br />
-								{new Date(listevent.publishedAt).toLocaleString()}
+								{new Date(listevent.datedeploy).toLocaleString()}
 							</Card.Text>
 						</div>
 						<Accordion className="mt-3" alwaysOpen data-bs-theme="dark">
