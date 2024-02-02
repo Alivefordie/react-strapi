@@ -138,7 +138,7 @@ function Evendtstaff() {
 								<br />
 								{listevent.description}
 							</Card.Text>
-							<Card.Text className="w-25">
+							<Card.Text className="text-end w-25">
 								สถานะ :{"   "}
 								{listevent.publishedAt ? (
 									<Badge pill bg="success">
